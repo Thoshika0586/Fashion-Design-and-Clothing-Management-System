@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fashion Design & Clothing Management System</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="navbarContainer"></div>
+
+<div class="hero-diag">
+    <img class="hero-diag-img left" src="assets/image1.png" alt="Marigold Bloom Frock sketch">
+    <div class="hero-diag-content">
+        <div class="eyebrow">TIE & DYE COLLECTION</div>
+        <h1>Artfully Dyed,<br>Naturally You.</h1>
+        <p class="lede">Explore our handcrafted tie & dye creations, available in various sizes. Order your 
+            perfect outfit or saree - delivered to your dooestep.
+        </p>
+        <div class="cta-row">
+            <a href="register.html" class="btn btn-accent">Shop Now</a>
+            <a href="#gallery" class="btn btn-outline">Explore Designs</a>
+        </div>
+        <div class="hero-watermark">LUMINA LABLE</div>
+    </div>
+    
+</div>
+<div class="dye-divider"></div>
+
+<div class="container" id="gallery">
+    <div class="section-title">
+        <span class="eyebrow-inline">Designer's Sketches</span>
+        
+    </div>
+    <div class="filter-tabs" id="filterTabs">
+        <button data-cat="">All</button>
+        <button data-cat="FROCK">Frocks</button>
+        <button data-cat="SAREE">Sarees</button>
+    </div>
+    <div class="gallery-grid" id="galleryGrid">
+        <div class="empty-state"><div class="icon">🧵</div>Loading sketches…</div>
+    </div>
+</div>
+
+<footer class="site-footer">Lumina Lable | Wear Your Story</footer>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script>
+renderNavbar('home');
+const urlCategory = new URLSearchParams(window.location.search).get("category") || "";
+let activeCategory = ["FROCK", "SAREE"].includes(urlCategory) ? urlCategory : "";
+document.querySelectorAll("#filterTabs button").forEach(b => {
+    b.classList.toggle("active", b.dataset.cat === activeCategory);
+});
+
+async function loadGallery() {
+    const grid = document.getElementById("galleryGrid");
+    grid.innerHTML = `<div class="empty-state"><div class="icon">🧵</div>Loading sketches…</div>`;
+    try {
+        const designs = await Api.getDesigns(activeCategory);
+        if (!designs.length) {
+            grid.innerHTML = `<div class="empty-state"><div class="icon">🧵</div>No sketches yet — check back soon.</div>`;
+            return;
+        }
+        grid.innerHTML = designs.map(d => `
+            <div class="design-card">
+                <div class="sketch"><img src="${d.sketchImage || 'assets/image1.svg'}" alt="${d.designName}"></div>
+                <div class="body">
+                    <span class="tag ${d.category === 'FROCK' ? 'tag-frock' : 'tag-saree'}">${d.category}</span>
+                    <h3 class="name">${d.designName}</h3>
+                    <p class="desc">${d.description || ''}</p>
+                    <div class="price-row">
+                        <span class="price">Rs. ${Number(d.price).toLocaleString()}</span>
+                        <a href="register.html" class="btn btn-primary btn-sm">Order this</a>
+                    </div>
+                </div>
+            </div>
+        `).join("");
+    } catch (e) {
+        grid.innerHTML = `<div class="empty-state">Couldn't reach the server. Is the backend running on port 8080?</div>`;
+    }
+}
+
+document.getElementById("filterTabs").addEventListener("click", (e) => {
+    if (e.target.tagName !== "BUTTON") return;
+    document.querySelectorAll("#filterTabs button").forEach(b => b.classList.remove("active"));
+    e.target.classList.add("active");
+    activeCategory = e.target.dataset.cat;
+    loadGallery();
+});
+
+loadGallery();
+</script>
+</body>
+</html>
