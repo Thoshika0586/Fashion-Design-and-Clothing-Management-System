@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fashion Design & Clothing Management System</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="navbarContainer"></div>
+
+<div class="dash-layout">
+    <div class="dash-sidebar">
+        <div class="sidebar-title">Menu</div>
+        <button class="nav-btn active" data-view="browse">Sketches</button>
+        <button class="nav-btn" data-view="cart">My Cart <span id="cartCount"></span></button>
+        <button class="nav-btn" data-view="orders">My Orders</button>
+        <button class="nav-btn" data-view="profile">My Profile</button>
+    </div>
+
+    <div class="dash-main">
+        <!-- BROWSE VIEW -->
+        <section id="view-browse">
+            <div class="section-title">
+                <span class="eyebrow-inline">Designer's Sketches</span>
+                
+            </div>
+            <div class="filter-tabs" id="filterTabs">
+                <button class="active" data-cat="">All</button>
+                <button data-cat="FROCK">Frocks</button>
+                <button data-cat="SAREE">Sarees</button>
+            </div>
+            <div class="gallery-grid" id="galleryGrid"></div>
+        </section>
+
+        <!-- CART VIEW -->
+        <section id="view-cart" style="display:none;">
+            <div class="section-title"><h2>My Cart</h2></div>
+            <div id="cartList"></div>
+            <div class="cart-summary" id="cartSummary" style="display:none;">
+                <div class="total-row"><span>Total</span><span id="cartTotal">Rs. 0</span></div>
+                <button class="btn btn-accent btn-block" id="checkoutBtn">Place Order</button>
+            </div>
+        </section>
+
+        <!-- ORDERS VIEW -->
+        <section id="view-orders" style="display:none;">
+            <div class="section-title"><h2>My Orders</h2></div>
+            <div id="ordersList"></div>
+        </section>
+
+        <!-- PROFILE VIEW -->
+        <section id="view-profile" style="display:none;">
+            <div class="section-title"><h2>My Profile</h2></div>
+            <div class="card" style="max-width:480px;">
+                <div class="form-success" id="profileSuccess"></div>
+                <form id="profileForm">
+                    <div class="field"><label>Full name</label><input type="text" id="profileName"></div>
+                    <div class="field"><label>Phone</label><input type="text" id="profilePhone"></div>
+                    <div class="field"><label>Address</label><input type="text" id="profileAddress"></div>
+                    <button class="btn btn-primary" type="submit">Save changes</button>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- Design detail / order modal -->
+<div class="modal-overlay" id="designModal">
+    <div class="modal">
+        <button class="close-x" id="closeModal">&times;</button>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/customer.js"></script>
+</body>
+</html>
