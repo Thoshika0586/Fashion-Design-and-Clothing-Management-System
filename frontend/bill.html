@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fashion Design & Clothing Management System</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+    .invoice-page { max-width: 780px; margin: 2rem auto; padding: 0 1rem; }
+    .invoice-card { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--line); }
+
+    .invoice-header {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 1.5rem; padding: 1.75rem 2rem;
+        background: linear-gradient(120deg, #f7f2e8, #efe6d6);
+        border-bottom: 3px solid var(--indigo);
+    }
+    .invoice-header .brand-block { display: flex; align-items: center; gap: 1rem; }
+    .invoice-header .brand-icon {
+        width: 46px; height: 46px; border-radius: 10px;
+        background: conic-gradient(var(--indigo), var(--madder), var(--turmeric), var(--indigo));
+        flex-shrink: 0;
+    }
+    .invoice-header .brand-title { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 700; color: var(--indigo-deep); letter-spacing: 0.02em; }
+    .invoice-header .brand-sub { font-size: 0.85rem; color: var(--ink-soft); margin-top: 0.15rem; }
+    .invoice-header img { height: 90px; opacity: 0.95; }
+
+    .invoice-body { padding: 2rem; }
+
+    .success-banner { text-align: center; margin-bottom: 1.75rem; }
+    .success-banner .check-circle {
+        width: 64px; height: 64px; border-radius: 50%;
+        background: #2c6e3d; color: #fff;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2rem; margin: 0 auto 0.75rem;
+    }
+    .success-banner h1 { color: #2c6e3d; font-size: 1.7rem; margin-bottom: 0.3rem; }
+    .success-banner p { color: var(--ink-soft); font-size: 0.95rem; }
+
+    .invoice-meta-card {
+        border: 1px solid var(--line); border-radius: 10px; padding: 1.25rem 1.5rem;
+        display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem 2rem; margin-bottom: 1.75rem;
+    }
+    .meta-row { display: flex; align-items: center; gap: 0.75rem; font-size: 0.92rem; }
+    .meta-row .meta-icon {
+        width: 30px; height: 30px; border-radius: 7px; background: var(--cotton-warm);
+        display: flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0;
+    }
+    .meta-row .meta-label { color: var(--ink-soft); min-width: 90px; }
+    .meta-row .meta-value { font-weight: 700; }
+
+    .invoice-items-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    .invoice-items-table th {
+        background: var(--indigo); color: #fff; padding: 0.7em 0.9em; text-align: left;
+        font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .invoice-items-table th:first-child { border-radius: 8px 0 0 8px; }
+    .invoice-items-table th:last-child { border-radius: 0 8px 8px 0; text-align: right; }
+    .invoice-items-table td { padding: 0.85em 0.9em; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
+    .invoice-items-table td:last-child { text-align: right; font-weight: 700; }
+    .invoice-items-table .item-cell { display: flex; align-items: center; gap: 0.75rem; }
+    .invoice-items-table .item-thumb {
+        width: 36px; height: 44px; border-radius: 5px; overflow: hidden; background: var(--cotton-warm); flex-shrink: 0;
+    }
+    .invoice-items-table .item-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    .invoice-totals { display: flex; justify-content: flex-end; margin-bottom: 1.75rem; }
+    .invoice-totals table { width: 280px; }
+    .invoice-totals td { padding: 0.4em 0.3em; font-size: 0.92rem; }
+    .invoice-totals td:last-child { text-align: right; }
+    .invoice-totals .discount-row td { color: var(--madder); }
+    .invoice-totals .grand-row td {
+        font-weight: 800; font-size: 1.2rem; font-family: 'Fraunces', serif;
+        color: var(--indigo-deep); border-top: 2px solid var(--ink); padding-top: 0.6em;
+    }
+
+    .payment-info-panel {
+        background: rgba(44,110,61,0.07); border: 1px solid rgba(44,110,61,0.2);
+        border-radius: 10px; padding: 1.25rem 1.5rem;
+        display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem 2rem; margin-bottom: 1.5rem;
+    }
+
+    .invoice-actions { display: flex; justify-content: center; gap: 1rem; padding: 0 2rem 1.5rem; flex-wrap: wrap; }
+    .invoice-footer-note {
+        text-align: center; padding: 1.25rem; border-top: 1px dashed var(--line);
+        font-family: 'Fraunces', serif; font-style: italic; color: var(--madder); font-size: 1rem;
+    }
+
+    @media (max-width: 620px) {
+        .invoice-meta-card, .payment-info-panel { grid-template-columns: 1fr; }
+        .invoice-header img { display: none; }
+    }
+</style>
+</head>
+<body>
+<div id="navbarContainer"></div>
+
+<div class="invoice-page">
+    <div class="invoice-card" id="invoiceCard">
+        <div class="empty-state" style="padding:3rem;">Loading invoice…</div>
+    </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+renderNavbar('');
+
+function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+}
+
+function backToDashboardLink() {
+    const user = getSession();
+    if (!user) return "index.html";
+    if (user.role === "CUSTOMER") return "customer-dashboard.html";
+    if (user.role === "DESIGNER") return "designer-dashboard.html";
+    if (user.role === "ADMIN") return "admin-dashboard.html";
+    return "index.html";
+}
+
+let currentBill = null;
+
+async function loadInvoice() {
+    const orderId = getParam("orderId");
+    const card = document.getElementById("invoiceCard");
+    if (!orderId) {
+        card.innerHTML = `<div class="empty-state" style="padding:3rem;">No order specified.</div>`;
+        return;
+    }
+    try {
+        const bill = await Api.getBill(orderId);
+        currentBill = bill;
+        const paid = bill.payment && bill.payment.status === "COMPLETED";
+
+        const itemsHtml = bill.items.map(i => `
+            <tr>
+                <td>
+                    <div class="item-cell">
+                        <div class="item-thumb"><img src="${i.sketchImage || 'assets/logo.png'}" alt="${i.designName}"></div>
+                        <div>${i.designName}<br><span style="color:var(--ink-soft); font-size:0.78rem;">${i.category} · Size ${i.size}</span></div>
+                    </div>
+                </td>
+                <td>${i.quantity}</td>
+                <td>Rs. ${Number(i.unitPrice).toLocaleString()}</td>
+                <td>Rs. ${(i.unitPrice * i.quantity).toLocaleString()}</td>
+            </tr>
+        `).join("");
+
+        const subtotal = bill.items.reduce((sum, i) => sum + i.unitPrice * i.quantity, 0);
+        const discount = 0;
+        const tax = 0;
+        const grandTotal = bill.totalAmount;
+
+        card.innerHTML = `
+            <div class="invoice-header">
+                <div class="brand-block">
+                    <div class="brand-icon"></div>
+                    <div>
+                        <div class="brand-title">Lumina Lable</div>
+                        <div class="brand-sub">Fashion Design & Clothing Management System</div>
+                    </div>
+                </div>
+                <img src="assets/logo.png" alt="">
+            </div>
+
+            <div class="invoice-body">
+                <div class="success-banner">
+                    <div class="check-circle">${paid ? '✓' : '!'}</div>
+                    <h1 style="${paid ? '' : 'color:var(--madder);'}">${paid ? 'Order Successful!' : 'Payment Pending'}</h1>
+                    <p>${paid ? 'Thank you! Your order has been received successfully.' : 'This order has not been paid yet.'}</p>
+                </div>
+
+                <div class="invoice-meta-card">
+                    <div class="meta-row"><span class="meta-icon">🧾</span><span class="meta-label">Invoice No</span><span class="meta-value">INV-${bill.orderId}</span></div>
+                    <div class="meta-row"><span class="meta-icon">🛍️</span><span class="meta-label">Order ID</span><span class="meta-value">${bill.orderId}</span></div>
+                    <div class="meta-row"><span class="meta-icon">📅</span><span class="meta-label">Date</span><span class="meta-value">${bill.orderDate}</span></div>
+                    <div class="meta-row"><span class="meta-icon">✏️</span><span class="meta-label">Designer</span><span class="meta-value">Lumina Lable</span></div>
+                    <div class="meta-row"><span class="meta-icon">👤</span><span class="meta-label">Customer</span><span class="meta-value">${bill.customerName}</span></div>
+                </div>
+
+                <table class="invoice-items-table">
+                    <thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>
+                    <tbody>${itemsHtml}</tbody>
+                </table>
+
+                <div class="invoice-totals">
+                    <table>
+                        <tr><td>Subtotal</td><td>Rs. ${subtotal.toLocaleString()}</td></tr>
+                        <tr class="discount-row"><td>Discount</td><td>- Rs. ${discount.toLocaleString()}</td></tr>
+                        <tr><td>Tax</td><td>Rs. ${tax.toLocaleString()}</td></tr>
+                        <tr class="grand-row"><td>Grand Total</td><td>Rs. ${Number(grandTotal).toLocaleString()}</td></tr>
+                    </table>
+                </div>
+
+                <div class="payment-info-panel">
+                    <div class="meta-row"><span class="meta-icon">💳</span><span class="meta-label">Method</span><span class="meta-value">${bill.payment ? bill.payment.method : '—'}</span></div>
+                    <div class="meta-row"><span class="meta-icon">🔖</span><span class="meta-label">Transaction ID</span><span class="meta-value">${bill.payment ? bill.payment.paymentId : '—'}</span></div>
+                    <div class="meta-row"><span class="meta-icon">🛡️</span><span class="meta-label">Status</span><span class="meta-value" style="color:${paid ? '#2c6e3d' : 'var(--madder)'};">${bill.payment ? bill.payment.status : 'UNPAID'}</span></div>
+                    <div class="meta-row"><span class="meta-icon">🕒</span><span class="meta-label">Paid on</span><span class="meta-value">${bill.payment ? bill.payment.paymentDate : '—'}</span></div>
+                </div>
+            </div>
+
+            <div class="invoice-actions">
+                <button class="btn btn-primary" id="downloadBtn">⬇ Download Invoice</button>
+                <a class="btn btn-outline" href="${backToDashboardLink()}">← Back to Dashboard</a>
+            </div>
+            <div class="invoice-footer-note">Thank you for choosing us! 💜</div>
+        `;
+
+        document.getElementById("downloadBtn").addEventListener("click", () => downloadInvoicePdf(bill, subtotal, discount, tax, grandTotal));
+    } catch (e) {
+        card.innerHTML = `<div class="empty-state" style="padding:3rem;">Couldn't load invoice: ${e.message}</div>`;
+    }
+}
+
+function downloadInvoicePdf(bill, subtotal, discount, tax, grandTotal) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    let y = 50;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.setTextColor(31, 59, 87);
+    doc.text("Lumina Lable", 40, y);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(85, 82, 76);
+    doc.text("Fashion Design & Clothing Management System", 40, y + 16);
+
+    y += 45;
+    doc.setDrawColor(200, 200, 200);
+    doc.line(40, y, 555, y);
+    y += 25;
+
+    doc.setFontSize(11);
+    doc.setTextColor(30, 30, 30);
+    doc.text(`Invoice No: INV-${bill.orderId}`, 40, y);
+    doc.text(`Order ID: ${bill.orderId}`, 320, y);
+    y += 18;
+    doc.text(`Date: ${bill.orderDate}`, 40, y);
+    doc.text(`Designer: Lumina Lable`, 320, y);
+    y += 18;
+    doc.text(`Customer: ${bill.customerName}`, 40, y);
+    y += 30;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFillColor(31, 59, 87);
+    doc.setTextColor(255, 255, 255);
+    doc.rect(40, y, 515, 22, "F");
+    doc.text("Item", 48, y + 15);
+    doc.text("Qty", 320, y + 15);
+    doc.text("Unit Price", 380, y + 15);
+    doc.text("Total", 480, y + 15);
+    y += 22;
+
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(30, 30, 30);
+    bill.items.forEach(i => {
+        y += 22;
+        doc.text(`${i.designName} (${i.category}, ${i.size})`, 48, y);
+        doc.text(String(i.quantity), 320, y);
+        doc.text(`Rs. ${Number(i.unitPrice).toLocaleString()}`, 380, y);
+        doc.text(`Rs. ${(i.unitPrice * i.quantity).toLocaleString()}`, 480, y);
+    });
+
+    y += 35;
+    doc.setDrawColor(220, 220, 220);
+    doc.line(320, y, 555, y);
+    y += 20;
+    doc.text("Subtotal", 380, y);
+    doc.text(`Rs. ${subtotal.toLocaleString()}`, 480, y);
+    y += 18;
+    doc.text("Discount", 380, y);
+    doc.text(`- Rs. ${discount.toLocaleString()}`, 480, y);
+    y += 18;
+    doc.text("Tax", 380, y);
+    doc.text(`Rs. ${tax.toLocaleString()}`, 480, y);
+    y += 22;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.text("Grand Total", 380, y);
+    doc.text(`Rs. ${Number(grandTotal).toLocaleString()}`, 480, y);
+
+    y += 40;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    if (bill.payment) {
+        doc.text(`Payment Method: ${bill.payment.method}`, 40, y);
+        doc.text(`Transaction ID: ${bill.payment.paymentId}`, 320, y);
+        y += 18;
+        doc.text(`Status: ${bill.payment.status}`, 40, y);
+        doc.text(`Paid on: ${bill.payment.paymentDate}`, 320, y);
+    } else {
+        doc.text("Payment: not yet completed", 40, y);
+    }
+
+    y += 50;
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(184, 74, 62);
+    doc.text("Thank you for choosing Lumina Lable", 40, y);
+
+    doc.save(`Invoice-${bill.orderId}.pdf`);
+}
+
+loadInvoice();
+</script>
+</body>
+</html>
