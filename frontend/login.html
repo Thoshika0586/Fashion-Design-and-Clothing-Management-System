@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fashion Design & Clothing Management System</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="navbarContainer"></div>
+<div class="auth-wrap">
+    <div class="card auth-card">
+        <div class="eyebrow">Lumina Lable</div>
+        <h2>LOGIN</h2>
+        <div class="form-error" id="formError"></div>
+        <form id="loginForm">
+            <div class="field">
+                <label>Email</label>
+                <input type="email" id="email" required placeholder="Enter your email">
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" id="password" required placeholder="Enter your password">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+        </form>
+        <div class="auth-switch">New here? <a href="register.html">Create a customer account</a></div>
+        <div class="auth-switch"><a href="index.html">← Back To Home</a></div>
+    </div>
+</div>
+
+<footer class="site-footer">Lumina Lable | Wear Your Story</footer>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script>
+renderNavbar('login');
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const errorBox = document.getElementById("formError");
+    errorBox.classList.remove("show");
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    try {
+        const user = await Api.login(email, password);
+        saveSession(user);
+        if (user.role === "CUSTOMER") window.location.href = "customer-dashboard.html";
+        else if (user.role === "DESIGNER") window.location.href = "designer-dashboard.html";
+        else if (user.role === "ADMIN") window.location.href = "admin-dashboard.html";
+    } catch (err) {
+        errorBox.textContent = err.message;
+        errorBox.classList.add("show");
+    }
+});
+</script>
+</body>
+</html>

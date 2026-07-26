@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fashion Design & Clothing Management System</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="navbarContainer"></div>
+
+<div class="dash-layout">
+    <div class="dash-sidebar">
+        <div class="sidebar-title">Menu</div>
+        <button class="nav-btn active" data-view="designs">My Sketches</button>
+        <button class="nav-btn" data-view="fabrics">Fabrics</button>
+        <button class="nav-btn" data-view="orders">Orders to Make</button>
+        <button class="nav-btn" data-view="inventory">Inventory</button>
+    </div>
+
+    <div class="dash-main">
+        <!-- DESIGNS -->
+        <section id="view-designs">
+            <div class="section-title" style="justify-content:space-between; width:100%;">
+                <div><span class="eyebrow-inline">My Sketches</span><h2>Frocks & Sarees</h2></div>
+                <button class="btn btn-accent" id="newDesignBtn">+ New sketch</button>
+            </div>
+            <div class="gallery-grid" id="designGrid"></div>
+        </section>
+
+        <!-- FABRICS -->
+        <section id="view-fabrics" style="display:none;">
+            <div class="section-title" style="justify-content:space-between; width:100%;">
+                <h2>Fabrics</h2>
+                <button class="btn btn-accent" id="newFabricBtn">+ Add fabric</button>
+            </div>
+            <table id="fabricTable">
+                <thead><tr><th>Name</th><th>Color</th><th>Price / unit</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <!-- ORDERS -->
+        <section id="view-orders" style="display:none;">
+            <div class="section-title"><h2>Orders to Make</h2></div>
+            <div id="ordersList"></div>
+        </section>
+
+        <!-- INVENTORY -->
+        <section id="view-inventory" style="display:none;">
+            <div class="section-title" style="justify-content:space-between; width:100%;">
+                <h2>Inventory</h2>
+                <button class="btn btn-accent" id="newInventoryBtn">+ Add item</button>
+            </div>
+            <table id="inventoryTable">
+                <thead><tr><th>Type</th><th>Item</th><th>Quantity</th><th>Unit price</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+    <div class="modal">
+        <button class="close-x" id="closeModal">&times;</button>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/designer.js"></script>
+</body>
+</html>

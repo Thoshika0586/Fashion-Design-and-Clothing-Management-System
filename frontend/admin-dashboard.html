@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Fashion Design and Clothing Management System</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="navbarContainer"></div>
+
+<div class="dash-layout">
+    <div class="dash-sidebar">
+        <div class="sidebar-title">Admin</div>
+        <button class="nav-btn active" data-view="report">Overview</button>
+        <button class="nav-btn" data-view="orders">Orders</button>
+        <button class="nav-btn" data-view="deliveries">Deliveries</button>
+        <button class="nav-btn" data-view="inventory">Inventory</button>
+        <button class="nav-btn" data-view="users">Users</button>
+    </div>
+
+    <div class="dash-main">
+        <!-- OVERVIEW / REPORT -->
+        <section id="view-report">
+            <div class="section-title"><h2>Business overview</h2></div>
+            <div class="stat-grid" id="statGrid"></div>
+            <h3>Inventory snapshot</h3>
+            <table id="reportInventoryTable">
+                <thead><tr><th>Type</th><th>Item</th><th>Quantity</th><th>Unit price</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <!-- ORDERS -->
+        <section id="view-orders" style="display:none;">
+            <div class="section-title"><h2>All orders</h2></div>
+            <div id="ordersList"></div>
+        </section>
+
+        <!-- DELIVERIES -->
+        <section id="view-deliveries" style="display:none;">
+            <div class="section-title"><h2>Deliveries</h2></div>
+            <table id="deliveryTable">
+                <thead><tr><th>Order</th><th>Customer</th><th>Address</th><th>Status</th><th>Delivery date</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <!-- INVENTORY -->
+        <section id="view-inventory" style="display:none;">
+            <div class="section-title" style="justify-content:space-between; width:100%;">
+                <h2>Inventory</h2>
+                <button class="btn btn-accent" id="newInventoryBtn">+ Add item</button>
+            </div>
+            <table id="inventoryTable">
+                <thead><tr><th>Type</th><th>Item</th><th>Quantity</th><th>Unit price</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <!-- USERS -->
+        <section id="view-users" style="display:none;">
+            <div class="section-title"><h2>Users</h2></div>
+            <table id="usersTable">
+                <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Joined</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+    <div class="modal">
+        <button class="close-x" id="closeModal">&times;</button>
+        <div id="modalContent"></div>
+    </div>
+</div>
+<footer class="site-footer">Lumina Lable | Wear Your Story</footer>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
